@@ -8,5 +8,11 @@
 
 cd ~/shm/variants/
 
-~/bin/plink --file all --extract all.prune.in --make-bed --allow-extra-chr \
---out all
+for i in all fh_fd fh fh.potomac fh.james fh.potomac.admix_J7_remove fh.potomac.admix_remove;
+do
+
+	~/bin/plink --file ${i}.thinned \
+	--make-bed --allow-extra-chr \
+	--out ${i}
+
+done

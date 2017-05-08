@@ -1,78 +1,118 @@
-dat <- read.table("~/shm/results/all.thinned.eigenvec", header=TRUE)
-#var <- read.table("~/admixture_mapping/results/pca.subsamp.eigenval", header=FALSE)
-labels <- substr(dat$IID, 1,5)
-species <- substr(dat$IID, 1,2)
-dat <- cbind (labels, dat)
-dat <- cbind(species, dat)
 
-fd <- which(dat$species == "Fd")
-fh <- which(dat$species == "Fh")
-fm <- which(dat$species == "Fm")
+dat <- read.table("~/shm/results/pcs.all.txt", header=FALSE)
+var <- read.table("~/shm/results/pve.all.txt")
+labels <- read.table("~/shm/variants/all.fam", header=FALSE)
+dat <- cbind (labels$V1, dat)
+dat <- cbind (substr(labels$V1, 1,2), dat)
+colnames(dat) <- c("pop", "indiv", "PC1", "PC2", "PC3", "PC4","PC5", "PC6", "PC7", "PC8", "PC9", "PC10")
+
+fd <- which(dat$pop == "Fd")
+fh <- which(dat$pop == "Fh")
+fm <- which(dat$pop == "Fm")
+
 
 col.plot <- c("blue", "red","green")
-png("~/shm/results/pca_all.png", h=1000, w=1000, pointsize=20)
-plot(x=dat$PC1, y=dat$PC2, col=col.plot[dat$species], pch=NA, xlab="PC1- 35%", ylab="PC2- 19%", cex=1, main="All pops")
+png("~/shm/figures/pca_all_PC1vsPC2.png", h=1000, w=1000, pointsize=20)
+plot(x=dat$PC1, y=dat$PC2, 
+	col=col.plot[dat$pop], 
+	xlab=paste("PC-1: ", round((var$V1[1]*100), 1), "%", sep=""), 
+	ylab=paste("PC-2: ", round((var$V1[2]*100), 1), "%", sep=""),
+	main="PCA: PC1 vs PC2 for all indivs", 
+	cex=1.6,
+	pch=19)
+legend(x="bottomright", legend = levels(dat$pop), col=col.plot, pch=19)
+dev.off()
 
-text(dat$PC1[fh],dat$PC2[fh],label=dat$labels[fh],col='blue')
-text(dat$PC1[fd],dat$PC2[fd],label=dat$labels[fd],col='red')
-text(dat$PC1[fm],dat$PC2[fm],label=dat$labels[fm],col='green')
-legend(x="topright", legend = levels(dat$species), col=c("red", "blue", "green"), pch=19)
+png("~/shm/figures/pca_all_PC2vsPC3.png", h=1000, w=1000, pointsize=20)
+plot(x=dat$PC2, y=dat$PC3, 
+	col=col.plot[dat$pop], 
+	xlab=paste("PC-2: ", round((var$V1[2]*100), 1), "%", sep=""), 
+	ylab=paste("PC-3: ", round((var$V1[3]*100), 1), "%", sep=""),
+	main="PCA: PC2 vs PC3 for all indivs" ,
+	cex=1.6,
+	pch=19)
+legend(x="bottomright", legend = levels(dat$pop), col=col.plot, pch=19)
 dev.off()
 
 
 ######
 ###### fd and fh only
+######
 
-dat <- read.table("~/shm/results/fh_fd.thinned.eigenvec", header=TRUE)
-#var <- read.table("~/admixture_mapping/results/pca.subsamp.eigenval", header=FALSE)
-labels <- substr(dat$IID, 1,5)
-species <- substr(dat$IID, 1,2)
-dat <- cbind (labels, dat)
-dat <- cbind(species, dat)
+dat <- read.table("~/shm/results/pcs.fh_fd.txt", header=FALSE)
+var <- read.table("~/shm/results/pve.fh_fd.txt")
+labels <- read.table("~/shm/variants/fh_fd.fam", header=FALSE)
+dat <- cbind (labels$V1, dat)
+dat <- cbind (substr(labels$V1, 1,2), dat)
+dat <- cbind (substr(labels$V1, 1,5), dat)
+colnames(dat) <- c("site", "pop", "indiv", "PC1", "PC2", "PC3", "PC4","PC5", "PC6", "PC7", "PC8", "PC9", "PC10")
 
-fd <- which(dat$species == "Fd")
-fh <- which(dat$species == "Fh")
+fd <- which(dat$pop == "Fd")
+fh <- which(dat$pop == "Fh")
 
 col.plot <- c("blue", "red")
-png("~/shm/results/pca_fh_fd.png", h=1000, w=1000, pointsize=20)
-plot(x=dat$PC1, y=dat$PC2, col=col.plot[dat$species], pch=NA, xlab="PC1- 25%", ylab="PC2- 5%", cex=1, main="F. het and F. dia")
-
-text(dat$PC1[fh],dat$PC2[fh],label=dat$labels[fh],col='blue')
-text(dat$PC1[fd],dat$PC2[fd],label=dat$labels[fd],col='red')
-legend(x="bottomleft", legend = levels(dat$species), col=c("red", "blue"), pch=19)
+png("~/shm/figures/pca_fh_fd_PC1vsPC2.png", h=1000, w=1000, pointsize=20)
+plot(x=dat$PC1, y=dat$PC2, 
+	xlab=paste("PC-1: ", round((var$V1[1]*100), 1), "%", sep=""), 
+	ylab=paste("PC-2: ", round((var$V1[2]*100), 1), "%", sep=""),
+	main="PCA: PC1 vs PC2  F. het and F. dia only", 
+	cex=1.6,
+	pch=NA)
+text(dat$PC1[fh],dat$PC2[fh],label=dat$site[fh],col='blue')
+text(dat$PC1[fd],dat$PC2[fd],label=dat$site[fd],col='red')
+#legend(x="bottomright", legend = levels(dat$site), col=col.plot, pch=19)
 dev.off()
+
+png("~/shm/figures/pca_fh_fd_PC2vsPC3.png", h=1000, w=1000, pointsize=20)
+plot(x=dat$PC2, y=dat$PC3, 
+	xlab=paste("PC-2: ", round((var$V1[2]*100), 1), "%", sep=""), 
+	ylab=paste("PC-3: ", round((var$V1[3]*100), 1), "%", sep=""),
+	main="PCA: PC2 vs PC3 F. het and F. dia only" ,
+	cex=1.6,
+	pch=NA)
+text(dat$PC2[fh],dat$PC3[fh],label=dat$site[fh],col='blue')
+text(dat$PC2[fd],dat$PC3[fd],label=dat$site[fd],col='red')
+#legend(x="bottomright", legend = levels(dat$site), col=col.plot, pch=19)
+dev.off()
+
 
 ######
-###### fh only
+######  fh only
+######
 
-dat <- read.table("~/shm/results/fh.thinned.eigenvec", header=TRUE)
-#var <- read.table("~/admixture_mapping/results/pca.subsamp.eigenval", header=FALSE)
-labels <- substr(dat$IID, 1,5)
-species <- substr(dat$IID, 1,2)
-river <- substring(labels, 4,4)
-location <- substring(labels, 5,5)
-dat <- cbind (labels, dat)
-dat <- cbind(species, dat)
-dat <- cbind(river, dat)
-dat <- cbind(location, dat)
+dat <- read.table("~/shm/results/pcs.fh.txt", header=FALSE)
+var <- read.table("~/shm/results/pve.fh.txt")
+labels <- read.table("~/shm/variants/fh.fam", header=FALSE)
+dat <- cbind (labels$V1, dat)
+dat <- cbind (substr(labels$V1, 1,2), dat)
+dat <- cbind (substr(labels$V1, 1,5), dat)
+dat <- cbind (substr(labels$V1, 4,4), dat)
+colnames(dat) <- c("river","site", "pop", "indiv", "PC1", "PC2", "PC3", "PC4","PC5", "PC6", "PC7", "PC8", "PC9", "PC10")
 
+james <- which(dat$river == "J")
+potomac <- which(dat$river == "P")
 
 col.plot <- c("blue", "red")
-png("~/shm/results/pca_fh.png", h=1000, w=1000, pointsize=20)
-plot(x=dat$PC1, y=dat$PC2, col=col.plot[dat$river], pch=NA, xlab="PC1- 5%", ylab="PC2- 4%", cex=0.2, main="F. het")
-
-text(dat$PC1,dat$PC2,label=dat$labels,col=col.plot[dat$river], cex=0.6)
-legend(x="bottomright", legend = levels(dat$river), col=c("red", "blue"), pch=19)
+png("~/shm/figures/pca_fh_PC1vsPC2.png", h=1000, w=1000, pointsize=20)
+plot(x=dat$PC1, y=dat$PC2, 
+	xlab=paste("PC-1: ", round((var$V1[1]*100), 1), "%", sep=""), 
+	ylab=paste("PC-2: ", round((var$V1[2]*100), 1), "%", sep=""),
+	main="PCA: PC1 vs PC2  F. het only", 
+	cex=1.6,
+	pch=NA)
+text(dat$PC1[james],dat$PC2[james],label=dat$site[james],col='blue')
+text(dat$PC1[potomac],dat$PC2[potomac],label=dat$site[potomac],col='red')
+legend(x="bottomleft", legend = c("James", "Potomac"), col=col.plot, pch=19)
 dev.off()
 
-#trying to differentiate between samp locations
-col.plot <- c("blue", "red", "green", "orange", "purple", "black", "grey" )
-shape <- c(19, 17)
-png("~/shm/results/pca_fh_rivers.png", h=1000, w=1000, pointsize=20)
-plot(x=dat$PC1, y=dat$PC2, col=col.plot[dat$location], pch=shape[dat$river], xlab="PC1- 5%", ylab="PC2- 4%", cex=1.3, main="F. het")
-
-#text(dat$PC1,dat$PC2,label=dat$labels,col=col.plot[dat$river])
-legend(x="topright", legend = levels(dat$river), col=c("black"), pch=shape[dat$river])
-legend(x="bottomright", legend = levels(dat$location), col=col.plot, pch=18, cex=1.4)
-
+png("~/shm/figures/pca_fh_PC2vsPC3.png", h=1000, w=1000, pointsize=20)
+plot(x=dat$PC2, y=dat$PC3, 
+	xlab=paste("PC-2: ", round((var$V1[2]*100), 1), "%", sep=""), 
+	ylab=paste("PC-3: ", round((var$V1[3]*100), 1), "%", sep=""),
+	main="PCA: PC2 vs PC3 F. het only" ,
+	cex=1.6,
+	pch=NA)
+text(dat$PC2[james],dat$PC3[james],label=dat$site[james],col='blue')
+text(dat$PC2[potomac],dat$PC3[potomac],label=dat$site[potomac],col='red')
+legend(x="bottomright", legend = c("James", "Potomac"), col=col.plot, pch=19)
 dev.off()

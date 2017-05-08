@@ -12,41 +12,41 @@ module load vcftools/0.1.13
 
 cd ~/shm/variants/
 
+
+#all indivs to ped
 zcat ~/shm/variants/all.filtered.vcf.gz  |\
 vcftools --vcf - \
---plink --chrom-map ~/shm/variants/all.plink-chrom-map.txt --out all
-
-#think markers for ld
-~/bin/plink --file all --indep 50 5 2 \
---allow-extra-chr \
+--plink \
+--chrom-map ~/shm/variants/all.plink-chrom-map.txt \
 --out all
 
-#think markers for ld for fh, fd only
-~/bin/plink --file all --indep 50 5 2 \
---allow-extra-chr \
---keep ~/shm/scripts/fh_fd.txt \
---out fh_fd
+#thin for ld
 
-#think markers for ld for fh only
 ~/bin/plink --file all --indep 50 5 2 \
---allow-extra-chr \
---keep ~/shm/scripts/fh.txt \
---out fh
+        --allow-extra-chr \
+        -out all
+
+for i in fh_fd fh fh.potomac fh.james fh.potomac.admix_J7_remove fh.potomac.admix_remove;
+do
+	~/bin/plink --file all --indep 50 5 2 \
+	--allow-extra-chr \
+	--keep ~/shm/scripts/pop.lists/${i}.txt \
+	--out ${i}
+
+done
 
 # output thinned ped
 
-~/bin/plink --file all --extract all.prune.in --recode --allow-extra-chr \
---out all.thinned
+for i in fh_fd fh fh.potomac fh.james fh.potomac.admix_J7_remove fh.potomac.admix_remove;
+do
+	~/bin/plink --file all --extract ${i}.prune.in --recode --allow-extra-chr \
+	--keep ~/shm/scripts/pop.lists/${i}.txt \
+	--out ${i}.thinned
 
-# output thinned ped fh and fd
+done
 
-~/bin/plink --file all --extract fh_fd.prune.in --recode --allow-extra-chr \
---keep ~/shm/scripts/fh_fd.txt \
---out fh_fd.thinned
 
-# output thinned ped fh
-
-~/bin/plink --file all --extract fh.prune.in --recode --allow-extra-chr \
---keep ~/shm/scripts/fh.txt \
---out fh.thinned
+#all indivs
+        ~/bin/plink --file all --extract all.prune.in --recode --allow-extra-chr \
+        --out all.thinned
 
