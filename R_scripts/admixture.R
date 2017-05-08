@@ -1,4 +1,3 @@
-
 library(ggplot2)
 library(reshape2)
 library(scales)
@@ -174,17 +173,12 @@ all.list <- list(dat2=dat2, dat3=dat3, dat4=dat4)
 for (i in 1:3){
 	all.list[[i]]$ord <- c("NA")
 	all.list[[i]]$ord[which(all.list[[i]]$site == "P1")] <- c("01")
-	all.list[[i]]$ord[which(all.list[[i]]$site == "J1")] <- c("02")
-	all.list[[i]]$ord[which(all.list[[i]]$site == "P2")] <- c("03")		
-	all.list[[i]]$ord[which(all.list[[i]]$site == "J2")] <- c("04")
-	all.list[[i]]$ord[which(all.list[[i]]$site == "P3")] <- c("05")
-	all.list[[i]]$ord[which(all.list[[i]]$site == "J3")] <- c("06")
-	all.list[[i]]$ord[which(all.list[[i]]$site == "P4")] <- c("07")
-	all.list[[i]]$ord[which(all.list[[i]]$site == "P5")] <- c("08")
-	all.list[[i]]$ord[which(all.list[[i]]$site == "J5")] <- c("09")
-	all.list[[i]]$ord[which(all.list[[i]]$site == "P6")] <- c("10")
-	all.list[[i]]$ord[which(all.list[[i]]$site == "J6")] <- c("11")
-	all.list[[i]]$ord[which(all.list[[i]]$site == "J7")] <- c("12")
+	all.list[[i]]$ord[which(all.list[[i]]$site == "P2")] <- c("02")		
+	all.list[[i]]$ord[which(all.list[[i]]$site == "P3")] <- c("03")
+	all.list[[i]]$ord[which(all.list[[i]]$site == "P4")] <- c("04")
+	all.list[[i]]$ord[which(all.list[[i]]$site == "P5")] <- c("05")
+	all.list[[i]]$ord[which(all.list[[i]]$site == "P6")] <- c("06")
+	all.list[[i]]$ord[which(all.list[[i]]$site == "J7")] <- c("07")
 	all.list[[i]] <- all.list[[i]][order(all.list[[i]]$ord),]
 	all.list[[i]]$num <- paste(all.list[[i]]$ord, all.list[[i]]$Individual, sep="-")
 }
@@ -245,12 +239,12 @@ all.list <- list(dat2=dat2, dat3=dat3, dat4=dat4)
 
 for (i in 1:3){
 	all.list[[i]]$ord <- c("NA")
-	all.list[[i]]$ord[which(all.list[[i]]$site == "J1")] <- c("02")
-	all.list[[i]]$ord[which(all.list[[i]]$site == "J2")] <- c("04")
-	all.list[[i]]$ord[which(all.list[[i]]$site == "J3")] <- c("06")
-	all.list[[i]]$ord[which(all.list[[i]]$site == "J5")] <- c("09")
-	all.list[[i]]$ord[which(all.list[[i]]$site == "J6")] <- c("11")
-	all.list[[i]]$ord[which(all.list[[i]]$site == "J7")] <- c("12")
+	all.list[[i]]$ord[which(all.list[[i]]$site == "J1")] <- c("01")
+	all.list[[i]]$ord[which(all.list[[i]]$site == "J2")] <- c("02")
+	all.list[[i]]$ord[which(all.list[[i]]$site == "J3")] <- c("03")
+	all.list[[i]]$ord[which(all.list[[i]]$site == "J5")] <- c("04")
+	all.list[[i]]$ord[which(all.list[[i]]$site == "J6")] <- c("05")
+	all.list[[i]]$ord[which(all.list[[i]]$site == "J7")] <- c("06")
 	all.list[[i]] <- all.list[[i]][order(all.list[[i]]$ord),]
 	all.list[[i]]$num <- paste(all.list[[i]]$ord, all.list[[i]]$Individual, sep="-")
 }
@@ -274,11 +268,148 @@ text(x= as.vector(tapply(1:length(site),site,mean)),y= -0.05,labels= (unique(sit
 title(main="K=2")
 
 pop<-all.list[["dat3"]][,3]
-site <- factor(site, levels = c("P1", "P2", "P3", "P4", "P5", "P6", "J7")) 
+site <- factor(site, levels = c("J1", "J2", "J3", "J5", "J6", "J7")) 
 h<-barplot(t(all.list[["dat3"]][,4:6]),xaxt="n",col=c("blue", "red", "purple"),space=0,border=NA,xlab="",ylab="admixture proportion")
 text(x= as.vector(tapply(1:length(site),site,mean)),y= -0.05,labels= (unique(site)),xpd=T)
 title(main="K=3")
 
 dev.off()
+
+
+###########
+###########
+########### fh potomac, admixed fhet (from f dia) and J7 removed
+###########
+###########
+###########
+
+dat2 <- read.table("~/shm/results/fh.potomac.admix_J7_remove.2.Q")
+dat3 <- read.table("~/shm/results/fh.potomac.admix_J7_remove.3.Q")
+dat4 <- read.table("~/shm/results/fh.potomac.admix_J7_remove.4.Q")
+
+id <- read.table("~/shm/variants/fh.potomac.admix_J7_remove.fam", header=FALSE)
+labels <- substr(id$V2, 1,2)
+site <- substr(id$V2, 4,5)
+river <- substr(id$V2, 4,4)
+labs <- data.frame(population = labels, Individual = id$V1, site=site)
+
+dat2 <- cbind(labs, dat2)
+dat3 <- cbind(labs, dat3)
+dat4 <- cbind(labs, dat4)
+
+colnames(dat2)<- c("species", "Individual", "site", "P1", "P2")
+colnames(dat3)<- c("species", "Individual", "site", "P1", "P2", "P3")
+colnames(dat4)<- c("species", "Individual", "site", "P1", "P2", "P4")
+
+all.list <- list(dat2=dat2, dat3=dat3, dat4=dat4)
+
+for (i in 1:3){
+	all.list[[i]]$ord <- c("NA")
+	all.list[[i]]$ord[which(all.list[[i]]$site == "P1")] <- c("01")
+	all.list[[i]]$ord[which(all.list[[i]]$site == "P2")] <- c("02")		
+	all.list[[i]]$ord[which(all.list[[i]]$site == "P3")] <- c("03")
+	all.list[[i]]$ord[which(all.list[[i]]$site == "P4")] <- c("04")
+	all.list[[i]]$ord[which(all.list[[i]]$site == "P5")] <- c("05")
+	all.list[[i]]$ord[which(all.list[[i]]$site == "P6")] <- c("06")
+	all.list[[i]] <- all.list[[i]][order(all.list[[i]]$ord),]
+	all.list[[i]]$num <- paste(all.list[[i]]$ord, all.list[[i]]$Individual, sep="-")
+}
+#write txt files
+write.table(dat2, "~/shm/results/fh.potomac.admix_J7_remove_k2.txt", quote=FALSE, col.names=TRUE,row.names=FALSE, sep="\t")
+write.table(dat3, "~/shm/results/fh.potomac.admix_J7_remove_k3.txt", quote=FALSE, col.names=TRUE,row.names=FALSE, sep="\t")
+write.table(dat4, "~/shm/results/fh.potomac.admix_J7_remove_k4.txt", quote=FALSE, col.names=TRUE,row.names=FALSE, sep="\t")
+
+png("~/shm/figures/admixture.fh.potomac.admix_J7_remove.png", width=900, height= 600, units="px")
+
+par(mfrow = c(2, 1))
+par(mar = c(3, 3, 1, 1), oma = c(1, 1, 1, 1))
+
+
+#k=2
+site<-all.list[["dat2"]][,3]
+site <- factor(site, levels = c("P1", "P2", "P3", "P4", "P5", "P6", "J7")) 
+h<-barplot(t(all.list[["dat2"]][,4:5]),xaxt="n",col=c("blue", "red"),space=0,border=NA,xlab="",
+	ylab="admixture proportion")
+text(x= as.vector(tapply(1:length(site),site,mean)),y= -0.05,labels= (unique(site)),xpd=T)
+title(main="K=2")
+
+pop<-all.list[["dat3"]][,3]
+site <- factor(site, levels = c("P1", "P2", "P3", "P4", "P5", "P6", "J7")) 
+h<-barplot(t(all.list[["dat3"]][,4:6]),xaxt="n",col=c("blue", "red", "purple"),space=0,border=NA,xlab="",
+	ylab="admixture proportion")
+text(x= as.vector(tapply(1:length(site),site,mean)),y= -0.05,labels= (unique(site)),xpd=T)
+title(main="K=3")
+
+dev.off()
+
+
+###########
+###########
+########### fh potomac, admixed fhet (from f dia) and J7 kept
+###########
+###########
+###########
+
+dat2 <- read.table("~/shm/results/fh.potomac.admix_remove.2.Q")
+dat3 <- read.table("~/shm/results/fh.potomac.admix_remove.3.Q")
+dat4 <- read.table("~/shm/results/fh.potomac.admix_remove.4.Q")
+
+id <- read.table("~/shm/variants/fh.potomac.admix_remove.fam", header=FALSE)
+labels <- substr(id$V2, 1,2)
+site <- substr(id$V2, 4,5)
+river <- substr(id$V2, 4,4)
+labs <- data.frame(population = labels, Individual = id$V1, site=site)
+
+dat2 <- cbind(labs, dat2)
+dat3 <- cbind(labs, dat3)
+dat4 <- cbind(labs, dat4)
+
+colnames(dat2)<- c("species", "Individual", "site", "P1", "P2")
+colnames(dat3)<- c("species", "Individual", "site", "P1", "P2", "P3")
+colnames(dat4)<- c("species", "Individual", "site", "P1", "P2", "P4")
+
+all.list <- list(dat2=dat2, dat3=dat3, dat4=dat4)
+
+for (i in 1:3){
+	all.list[[i]]$ord <- c("NA")
+	all.list[[i]]$ord[which(all.list[[i]]$site == "P1")] <- c("01")
+	all.list[[i]]$ord[which(all.list[[i]]$site == "P2")] <- c("02")		
+	all.list[[i]]$ord[which(all.list[[i]]$site == "P3")] <- c("03")
+	all.list[[i]]$ord[which(all.list[[i]]$site == "P4")] <- c("04")
+	all.list[[i]]$ord[which(all.list[[i]]$site == "P5")] <- c("05")
+	all.list[[i]]$ord[which(all.list[[i]]$site == "P6")] <- c("06")
+	all.list[[i]]$ord[which(all.list[[i]]$site == "P7")] <- c("07")
+	all.list[[i]] <- all.list[[i]][order(all.list[[i]]$ord),]
+	all.list[[i]]$num <- paste(all.list[[i]]$ord, all.list[[i]]$Individual, sep="-")
+}
+#write txt files
+write.table(dat2, "~/shm/results/fh.potomac.admix_remove_k2.txt", quote=FALSE, col.names=TRUE,row.names=FALSE, sep="\t")
+write.table(dat3, "~/shm/results/fh.potomac.admix_remove_k3.txt", quote=FALSE, col.names=TRUE,row.names=FALSE, sep="\t")
+write.table(dat4, "~/shm/results/fh.potomac.admix_remove_k4.txt", quote=FALSE, col.names=TRUE,row.names=FALSE, sep="\t")
+
+png("~/shm/figures/admixture.fh.potomac.admix_remove.png", width=900, height= 600, units="px")
+
+par(mfrow = c(2, 1))
+par(mar = c(3, 3, 1, 1), oma = c(1, 1, 1, 1))
+
+
+#k=2
+site<-all.list[["dat2"]][,3]
+site <- factor(site, levels = c("P1", "P2", "P3", "P4", "P5", "P6", "J7")) 
+h<-barplot(t(all.list[["dat2"]][,4:5]),xaxt="n",col=c("blue", "red"),space=0,border=NA,xlab="",
+	ylab="admixture proportion")
+text(x= as.vector(tapply(1:length(site),site,mean)),y= -0.05,labels= (unique(site)),xpd=T)
+title(main="K=2")
+
+pop<-all.list[["dat3"]][,3]
+site <- factor(site, levels = c("P1", "P2", "P3", "P4", "P5", "P6", "J7")) 
+h<-barplot(t(all.list[["dat3"]][,4:6]),xaxt="n",col=c("blue", "red", "purple"),space=0,border=NA,xlab="",
+	ylab="admixture proportion")
+text(x= as.vector(tapply(1:length(site),site,mean)),y= -0.05,labels= (unique(site)),xpd=T)
+title(main="K=3")
+
+dev.off()
+
+
 
 
