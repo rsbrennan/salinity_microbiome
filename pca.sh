@@ -10,15 +10,12 @@
 
 cd ~/shm/results/
 
-#pca
+	sed -i 's/^23/x23/g' ~/shm/variants/all.thinned.map
+	sed -i 's/^23/x23/g' ~/shm/variants/fh.map
 
-#~/bin/plink --file all.thinned \
-#--pca header --allow-extra-chr --out ~/shm/results/all.thinned
+	~/bin/plink --file  ~/shm/variants/all.thinned \
+	--pca header --allow-extra-chr --out ~/shm/analysis/pca/all
 
+        ~/bin/plink --file  ~/shm/variants/fh \
+        --pca header --allow-extra-chr --out ~/shm/analysis/pca/fh
 
-for i in all fh_fd fh;
-do
-
-	~/bin/flashpca/flashpca --bfile ~/shm/variants/${i} --suffix .${i}.txt
-
-done

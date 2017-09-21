@@ -16,3 +16,9 @@ do
 	--out ${i}
 
 done
+
+#f het alone
+
+        ~/bin/plink --file fh.thinned \
+        --make-bed --allow-extra-chr \
+        --out fh

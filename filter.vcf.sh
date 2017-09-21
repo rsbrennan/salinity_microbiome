@@ -6,15 +6,29 @@
 #SBATCH -e filt-stderr-%j.txt
 #SBATCH -J filt
 
+module load vcftools/0.1.13
+
 cd ~/shm/variants/
 
-~/bin/vcftools/bin/vcftools --gzvcf ~/shm/variants/all.vcf.gz \
+vcftools --gzvcf ~/shm/variants/all.vcf.gz \
 --recode --recode-INFO-all --maf 0.05 \
---minQ 20 --minGQ 30 \
+--minQ 20  \
 --min-alleles 2 --max-alleles 2 \
---min-meanDP 8 \
+--min-meanDP 20 \
+--max-meanDP 80 \
 --max-missing 0.8 \
 --remove-indels --stdout | bgzip > ~/shm/variants/all.filtered.vcf.gz
 
 tabix -p vcf ~/shm/variants/all.filtered.vcf.gz
 
+vcftools --gzvcf ~/shm/variants/all.vcf.gz \
+--recode --recode-INFO-all --maf 0.05 \
+--minQ 20  \
+--min-alleles 2 --max-alleles 2 \
+--min-meanDP 20 \
+--max-meanDP 80 \
+--max-missing 0.8 \
+--keep ~/shm/scripts/pop.lists/fh.pop \
+--remove-indels --stdout | bgzip > ~/shm/variants/fh.filtered.vcf.gz
+
+tabix -p vcf ~/shm/variants/fh.filtered.vcf.gz
