@@ -16,42 +16,42 @@ cd ~/shm/variants/
 ## all indivs for all species
 ##
 	#all indivs to ped
-	zcat ~/shm/variants/all.filtered.vcf.gz  |\
-	vcftools --vcf - \
-	--plink \
-	--chrom-map ~/shm/variants/all.plink-chrom-map.txt \
-	--out all
+#	zcat ~/shm/variants/all.filtered.vcf.gz  |\
+#	vcftools --vcf - \
+#	--plink \
+#	--chrom-map ~/shm/variants/all.plink-chrom-map.txt \
+#	--out all
 
 	#thin for ld
 
-	~/bin/plink --file all --indep 50 5 2 \
-        	--allow-extra-chr \
-        	-out all
+#	~/bin/plink --file all --indep 50 5 2 \
+#        	--allow-extra-chr \
+#        	-out all
 
-	for i in fh_fd fh fh.potomac fh.james fh.potomac.admix_J7_remove fh.potomac.admix_remove;
-	do
-		~/bin/plink --file all --indep 50 5 2 \
-		--allow-extra-chr \
-		--keep ~/shm/scripts/pop.lists/${i}.txt \
-		--out all.${i}
+#	for i in fh_fd fh fh.potomac fh.james fh.potomac.admix_J7_remove fh.potomac.admix_remove;
+#	do
+#		~/bin/plink --file all --indep 50 5 2 \
+#		--allow-extra-chr \
+#		--keep ~/shm/scripts/pop.lists/${i}.txt \
+#		--out all.${i}
 
-	done
+#	done
 
 	# output thinned ped
 
-	for i in fh_fd fh fh.potomac fh.james fh.potomac.admix_J7_remove fh.potomac.admix_remove;
-	do
-		~/bin/plink --file all --extract all.prune.in --recode --allow-extra-chr \
-		--keep ~/shm/scripts/pop.lists/${i}.txt \
-		--out all.thinned.${i}
-
-	done
+#	for i in fh_fd fh fh.potomac fh.james fh.potomac.admix_J7_remove fh.potomac.admix_remove;
+#	do
+#		~/bin/plink --file all --extract all.prune.in --recode --allow-extra-chr \
+#		--keep ~/shm/scripts/pop.lists/${i}.txt \
+#		--out all.thinned.${i}
+#
+#	done
 
 
 
 #all indivs
-        ~/bin/plink --file all --extract all.prune.in --recode --allow-extra-chr \
-        --out all.thinned
+ #       ~/bin/plink --file all --extract all.prune.in --recode --allow-extra-chr \
+  #      --out all.thinned
 
 ######################################
 
@@ -77,6 +77,29 @@ cd ~/shm/variants/
 		~/bin/plink --file fh --extract fh.prune.in --recode --allow-extra-chr \
 		--keep ~/shm/scripts/pop.lists/fh.txt \
 		--out fh.thinned
+
+
+##
+
+	for i in fh.potomac fh.james fh.james.j7_remove fh.potomac.admix_J7_remove;
+	do
+		~/bin/plink --file fh --indep 50 5 2 \
+		--allow-extra-chr \
+		--keep ~/shm/scripts/pop.lists/${i}.txt \
+		--out ${i}
+
+	done
+
+	# output thinned ped
+
+	for i in fh.potomac fh.james fh.james.j7_remove fh.potomac.admix_J7_remove;
+	do
+		~/bin/plink --file fh --extract all.prune.in --recode --allow-extra-chr \
+		--keep ~/shm/scripts/pop.lists/${i}.txt \
+		--out ${i}
+
+	done
+
 
 
 

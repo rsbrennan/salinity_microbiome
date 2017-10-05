@@ -8,17 +8,27 @@
 
 cd ~/shm/variants/
 
-for i in all fh_fd fh fh.potomac fh.james fh.potomac.admix_J7_remove fh.potomac.admix_remove;
-do
+#for i in all fh_fd fh fh.potomac fh.james fh.potomac.admix_J7_remove fh.potomac.admix_remove;
+#do
 
-	~/bin/plink --file ${i}.thinned \
-	--make-bed --allow-extra-chr \
-	--out ${i}
+#	~/bin/plink --file ${i}.thinned \
+#	--make-bed --allow-extra-chr \
+#	--out ${i}
 
-done
+#done
 
 #f het alone
 
         ~/bin/plink --file fh.thinned \
         --make-bed --allow-extra-chr \
         --out fh
+
+
+for i in fh.potomac fh.james fh.james.j7_remove fh.potomac.admix_J7_remove;
+do
+
+        ~/bin/plink --file ${i} \
+        --make-bed --allow-extra-chr \
+        --out ${i}
+
+done
